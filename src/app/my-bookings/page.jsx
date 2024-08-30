@@ -1,14 +1,16 @@
 "use client";
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { FiTrash } from "react-icons/fi";
-import Link from "next/link";
 import { toast } from "react-toastify";
+import UpdateModal from "@/components/UpdateModal/UpdateModal";
 
 const BookingsPage = () => {
   const { data: session, status } = useSession();
   const [bookings, setBookings] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   const loadData = async () => {
     if (session?.user?.email) {
@@ -17,11 +19,8 @@ const BookingsPage = () => {
           `http://localhost:3000/my-bookings/api/${session.user.email}`
         );
         const data = await res.json();
-        console.log("API Response:", data);
-
         if (data?.mybookings && Array.isArray(data.mybookings)) {
           setBookings(data.mybookings);
-          console.log("Bookings set:", data.mybookings);
         } else {
           console.error("mybookings not found or not an array in response");
         }
@@ -37,9 +36,11 @@ const BookingsPage = () => {
     }
   }, [status, session]);
 
-  useEffect(() => {
-    console.log("Bookings state:", bookings);
-  }, [bookings]);
+  const handleEdit = (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+  };
+
   const handleDelete = async (id) => {
     const deleted = await fetch(
       `http://localhost:3000/my-bookings/api/booking/${id}`,
@@ -47,7 +48,6 @@ const BookingsPage = () => {
         method: "DELETE",
       }
     );
-    console.log(deleted);
     const res = await deleted.json();
     if (res?.response?.deletedCount > 0) {
       toast.success("Service deleted successfully");
@@ -78,6 +78,12 @@ const BookingsPage = () => {
                   Price
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  Address
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Phone
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Booking Date
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -100,14 +106,18 @@ const BookingsPage = () => {
                       ${booking.price}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      {booking.address}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {booking.phone}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       {booking.date}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap flex items-center">
-                      <Link href={`/my-bookings/update/${booking._id}`}>
-                        <button>
-                          <MdOutlineModeEdit className="text-xl text-blue-500 hover:text-blue-700" />
-                        </button>
-                      </Link>
+                      <button onClick={() => handleEdit(booking)}>
+                        <MdOutlineModeEdit className="text-xl text-blue-500 hover:text-blue-700" />
+                      </button>
                       <button onClick={() => handleDelete(booking._id)}>
                         <FiTrash className="text-xl text-red-500 hover:text-red-700 ms-4" />
                       </button>
@@ -128,6 +138,15 @@ const BookingsPage = () => {
           </table>
         </div>
       </div>
+      {showModal && (
+        <UpdateModal
+          booking={selectedBooking}
+          onClose={() => {
+            setShowModal(false);
+            loadData(); // Reload the data when modal closes
+          }}
+        />
+      )}
     </div>
   );
 };

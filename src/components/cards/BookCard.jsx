@@ -2,10 +2,13 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import BookingModal from "../shared/BookingModal";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const BookCard = ({ book }) => {
   const { book_name, writer_name, image, price } = book || {};
   const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
 
   const handleAddToCartClick = () => {
     setShowModal(true);
@@ -28,6 +31,10 @@ const BookCard = ({ book }) => {
     );
     console.log("booking", res);
     handleCloseModal();
+    if (res.status === 200) {
+      toast.success("Service added successfully");
+      router.push("/my-bookings");
+    }
   };
 
   return (

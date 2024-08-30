@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { FiTrash } from "react-icons/fi";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const BookingsPage = () => {
   const { data: session, status } = useSession();
@@ -39,6 +40,20 @@ const BookingsPage = () => {
   useEffect(() => {
     console.log("Bookings state:", bookings);
   }, [bookings]);
+  const handleDelete = async (id) => {
+    const deleted = await fetch(
+      `http://localhost:3000/my-bookings/api/booking/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    console.log(deleted);
+    const res = await deleted.json();
+    if (res?.response?.deletedCount > 0) {
+      toast.success("Service deleted successfully");
+      loadData();
+    }
+  };
 
   return (
     <div className="m-6 md:m-12">

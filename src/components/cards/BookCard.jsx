@@ -29,7 +29,7 @@ const BookCard = ({ book }) => {
         },
       }
     );
-    console.log("booking", res);
+    // console.log("booking", res);
     handleCloseModal();
     if (res.status === 200) {
       toast.success("Service added successfully");

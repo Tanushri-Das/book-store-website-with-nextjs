@@ -1,5 +1,13 @@
+import axios from "axios";
+
 export const getBooks = async () => {
-  const res = await fetch("http://localhost:3000/books/api/get-all");
-  const books = await res.json();
-  return books;
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/books/api/get-all`
+    );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return [];
+  }
 };

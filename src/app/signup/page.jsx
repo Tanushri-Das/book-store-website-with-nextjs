@@ -23,7 +23,7 @@ const SignupPage = () => {
         "content-type": "application/json",
       },
     });
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       e.target.reset();
       toast.success("User created successfully");

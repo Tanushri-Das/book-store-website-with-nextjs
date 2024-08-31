@@ -7,7 +7,7 @@ import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const session = useSession();
-  console.log(session);
+  // console.log(session);
   return (
     <div className="bg-base-100 text-slate-900 border-b-[1px] px-10 py-2">
       <div className="navbar container mx-auto">

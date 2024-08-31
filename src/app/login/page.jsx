@@ -19,7 +19,7 @@ const LoginPage = () => {
       password,
       redirect: false,
     });
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       e.target.reset();
       toast.success("Login successfully");

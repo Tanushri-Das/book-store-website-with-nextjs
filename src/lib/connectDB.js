@@ -15,6 +15,6 @@ export const connectDB = async () => {
     db = client.db("book-store-website");
     return db;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };

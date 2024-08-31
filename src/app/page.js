@@ -1,14 +1,14 @@
-import Banner from '@/components/Homepage/Banner'
-import Books from '@/components/Homepage/Books'
-import React from 'react'
+export const dynamic = "force-dynamic";
 
-const page = () => {
+import Homepage from "@/components/Homepage/Homepage";
+import React from "react";
+
+const Home = () => {
   return (
     <div>
-     <Banner/>
-     <Books/>
+      <Homepage />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Home;

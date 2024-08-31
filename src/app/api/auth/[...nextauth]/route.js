@@ -59,7 +59,7 @@ const handler = NextAuth({
             return user;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         return user;

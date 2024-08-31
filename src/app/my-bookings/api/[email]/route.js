@@ -1,14 +1,15 @@
 import { connectDB } from "@/lib/connectDB";
+import { NextResponse } from "next/server";
 
-export const GET = async (request, { params }) => {
+export const GET = async (req, { params }) => {
   const db = await connectDB();
   const bookingsCollection = db.collection("bookings");
   try {
     const mybookings = await bookingsCollection
       .find({ email: params.email })
       .toArray();
-    return Response.json({ mybookings });
+    return NextResponse.json({ mybookings });
   } catch (error) {
-    console.log(error);
+    return NextResponse.json({ message: "Something went wrong", error });
   }
 };
